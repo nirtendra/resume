@@ -294,7 +294,9 @@ export default function ResumeBuilderClient() {
         </Accordion>
       </div>
       <div className="lg:sticky lg:top-24">
-        <SelectedTemplateComponent ref={resumePreviewRef} data={resumeData} />
+        <div ref={resumePreviewRef}>
+          <SelectedTemplateComponent data={resumeData} />
+        </div>
       </div>
     </div>
   );

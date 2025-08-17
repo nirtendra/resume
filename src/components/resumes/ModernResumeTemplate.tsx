@@ -6,12 +6,11 @@ import type { ResumeData } from '../ResumeBuilderClient';
 
 interface ResumePreviewProps {
   data: ResumeData;
-  ref: ForwardedRef<HTMLDivElement>;
 }
 
-export function ModernResumeTemplate({ data, ref }: ResumePreviewProps) {
+export function ModernResumeTemplate({ data }: ResumePreviewProps) {
   return (
-    <div ref={ref} className="bg-white dark:bg-card shadow-lg rounded-lg overflow-hidden">
+    <div className="bg-white dark:bg-card shadow-lg rounded-lg overflow-hidden">
       <div className="p-8 md:p-10 text-black font-body grid grid-cols-3 gap-10">
         <div className="col-span-1 border-r pr-8">
           <header className="text-left mb-8">
