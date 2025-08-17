@@ -55,7 +55,12 @@ export async function generateResume(input: GenerateResumeInput): Promise<Genera
 
 const prompt = ai.definePrompt({
   name: 'generateResumePrompt',
-  input: {schema: GenerateResumeInputSchema},
+  input: {
+    schema: z.object({
+      jobDescription: z.string(),
+      currentResume: z.string(), // Expecting a JSON string now
+    }),
+  },
   output: {schema: ResumeDataSchema},
   prompt: `You are an expert resume writer and career coach specializing in creating ATS-friendly resumes that get noticed.
 
@@ -64,8 +69,8 @@ const prompt = ai.definePrompt({
   Job Description:
   {{{jobDescription}}}
 
-  Current Resume Data:
-  {{{jsonStringify currentResume}}}
+  Current Resume Data (in JSON format):
+  {{{currentResume}}}
 
   Instructions:
   1.  **Rewrite the Professional Summary**: Make it concise, powerful, and directly aligned with the key requirements of the job description.
@@ -83,13 +88,11 @@ const generateResumeFlow = ai.defineFlow(
     outputSchema: ResumeDataSchema,
   },
   async (input) => {
-    // Genkit's `jsonStringify` helper isn't available in the prompt definition,
-    // so we manually stringify it here before passing it to the prompt.
     const promptInput = {
       ...input,
       currentResume: JSON.stringify(input.currentResume, null, 2),
     };
-    const {output} = await prompt(promptInput as any);
+    const {output} = await prompt(promptInput);
     return output!;
   }
 );
