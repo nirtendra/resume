@@ -33,8 +33,8 @@ const ResumeDataSchema = z.object({
   name: z.string(),
   email: z.string(),
   phone: z.string(),
-  linkedin: z.string(),
-  github: z.string(),
+  linkedin: z.string().optional(),
+  github: z.string().optional(),
   summary: z.string(),
   experience: z.array(ExperienceSchema),
   education: z.array(EducationSchema),
@@ -89,9 +89,9 @@ const prompt = ai.definePrompt({
       *   Analyze the job description for key technical skills, soft skills, and relevant keywords.
       *   Update the skills section to be a comprehensive, comma-separated list that includes these keywords while retaining the user's core competencies.
 
-  5.  **Maintain Professional Integrity**:
-      *   **Do Not Change**: Do not alter the user's name, contact information (email, phone, linkedin, github), or education details (institution, degree, date).
-      *   **Tone & Quality**: Maintain a highly professional and polished tone throughout the entire document.
+  5.  **Maintain Professional Integrity & Contextualize Contact Info**:
+      *   **Do Not Change**: Do not alter the user's name, email, phone, or education details (institution, degree, date). Preserve the user's provided values for LinkedIn and GitHub if they exist.
+      *   **Contextual Links**: Based on the job description, decide if the 'linkedin' and 'github' fields are relevant. For example, a software engineering role should include GitHub, but a sales role might not. If a field is not relevant, omit it from the final JSON output.
 
   6.  **Return a Complete Resume**: Your final output must be the complete, updated resume data in the specified JSON format, with all sections intelligently filled out.
   `,

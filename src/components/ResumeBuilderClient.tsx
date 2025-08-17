@@ -34,8 +34,8 @@ export interface ResumeData {
   name: string;
   email: string;
   phone: string;
-  linkedin: string;
-  github: string;
+  linkedin?: string;
+  github?: string;
   summary: string;
   experience: Experience[];
   education: Education[];
@@ -346,11 +346,11 @@ export default function ResumeBuilderClient() {
                  </div>
                  <div>
                     <Label htmlFor="linkedin">LinkedIn</Label>
-                    <Input id="linkedin" name="linkedin" value={resumeData.linkedin} onChange={handleChange} />
+                    <Input id="linkedin" name="linkedin" value={resumeData.linkedin || ''} onChange={handleChange} />
                  </div>
                  <div className="md:col-span-2">
                     <Label htmlFor="github">GitHub</Label>
-                    <Input id="github" name="github" value={resumeData.github} onChange={handleChange} />
+                    <Input id="github" name="github" value={resumeData.github || ''} onChange={handleChange} />
                  </div>
               </div>
             </AccordionContent>
