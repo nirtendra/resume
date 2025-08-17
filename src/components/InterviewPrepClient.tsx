@@ -77,7 +77,7 @@ export default function InterviewPrepClient() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <MessageSquareQuote className="text-primary" />
-                Potential Interview Questions
+                <span>Potential Interview Questions</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -98,7 +98,7 @@ export default function InterviewPrepClient() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Lightbulb className="text-primary" />
-                Key Talking Points
+                <span>Key Talking Points</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
