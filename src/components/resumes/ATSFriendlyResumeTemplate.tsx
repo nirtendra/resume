@@ -1,5 +1,5 @@
 'use client';
-import type { ResumeData, SectionId } from '../ResumeBuilderClient';
+import type { ResumeData, SectionId } from '../resume-builder/types';
 
 interface ResumePreviewProps {
   data: ResumeData;

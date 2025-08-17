@@ -1,8 +1,7 @@
 'use client';
-import type { ForwardedRef } from 'react';
 import React from 'react';
 import { Mail, Phone, Linkedin, Github } from 'lucide-react';
-import type { ResumeData, SectionId } from '../ResumeBuilderClient';
+import type { ResumeData, SectionId } from '../resume-builder/types';
 
 interface ResumePreviewProps {
   data: ResumeData;

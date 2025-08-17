@@ -2,7 +2,7 @@
 
 import { useRequireAuth } from '@/hooks/use-require-auth';
 import { AppLayout } from '@/components/AppLayout';
-import ResumeBuilderClient from '@/components/ResumeBuilderClient';
+import ResumeBuilderClient from '@/components/resume-builder/ResumeBuilderClient';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function ResumeBuilderPage() {

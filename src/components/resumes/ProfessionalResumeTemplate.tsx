@@ -1,6 +1,6 @@
 'use client';
 import { Mail, Phone, Linkedin, Github } from 'lucide-react';
-import type { ResumeData, SectionId } from '../ResumeBuilderClient';
+import type { ResumeData, SectionId } from '../resume-builder/types';
 
 interface ResumePreviewProps {
   data: ResumeData;

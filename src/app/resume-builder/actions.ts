@@ -2,7 +2,7 @@
 
 import htmlToDocx from 'html-to-docx';
 import { generateResume, type GenerateResumeInput } from '@/ai/flows/generate-resume';
-import type { ResumeData } from '@/components/ResumeBuilderClient';
+import type { ResumeData } from '@/components/resume-builder/types';
 
 export async function createWordDocument(htmlContent: string) {
   if (!htmlContent) {
