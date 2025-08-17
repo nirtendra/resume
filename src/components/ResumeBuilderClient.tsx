@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
+import htmlToDocx from 'html-to-docx';
 import {
   Accordion,
   AccordionContent,
@@ -9,15 +10,23 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Download, PlusCircle, Trash2, Palette } from 'lucide-react';
+import { Download, PlusCircle, Trash2, Palette, ChevronDown, FileText, FileWord } from 'lucide-react';
 import { ClassicResumeTemplate } from './resumes/ClassicResumeTemplate';
 import { ModernResumeTemplate } from './resumes/ModernResumeTemplate';
 import { CreativeResumeTemplate } from './resumes/CreativeResumeTemplate';
+import { ProfessionalResumeTemplate } from './resumes/ProfessionalResumeTemplate';
+import { ATSFriendlyResumeTemplate } from './resumes/ATSFriendlyResumeTemplate';
 
 export interface ResumeData {
   name: string;
@@ -77,6 +86,8 @@ const templates = {
   classic: ClassicResumeTemplate,
   modern: ModernResumeTemplate,
   creative: CreativeResumeTemplate,
+  professional: ProfessionalResumeTemplate,
+  atsFriendly: ATSFriendlyResumeTemplate,
 };
 
 type TemplateKey = keyof typeof templates;
@@ -88,7 +99,60 @@ export default function ResumeBuilderClient() {
 
   const handlePrint = useReactToPrint({
     content: () => resumePreviewRef.current,
+    documentTitle: `${resumeData.name.replace(' ', '_')}_Resume`,
   });
+
+  const handleWordDownload = async () => {
+    const content = resumePreviewRef.current;
+    if (content) {
+      const htmlString = `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="UTF-8">
+            <style>
+              body { font-family: Arial, sans-serif; color: black; }
+              h1, h2, h3, h4, h5, h6 { color: black; }
+              a { color: blue; text-decoration: none; }
+              ul { list-style-type: disc; margin-left: 20px; }
+              li { margin-bottom: 5px; }
+              .font-bold { font-weight: bold; }
+              .text-sm { font-size: 0.875rem; }
+              .text-base { font-size: 1rem; }
+              .italic { font-style: italic; }
+              .mb-2 { margin-bottom: 0.5rem; }
+              .mb-4 { margin-bottom: 1rem; }
+              .mb-6 { margin-bottom: 1.5rem; }
+              .mt-2 { margin-top: 0.5rem; }
+              .pb-2 { padding-bottom: 0.5rem; }
+              .flex { display: flex; }
+              .justify-between { justify-content: space-between; }
+              .items-baseline { align-items: baseline; }
+              .space-y-4 > * + * { margin-top: 1rem; }
+              .space-y-6 > * + * { margin-top: 1.5rem; }
+              .border-b { border-bottom: 1px solid #e5e7eb; }
+              .text-gray-800 { color: #1f2937; }
+              .text-gray-600 { color: #4b5563; }
+              .text-gray-500 { color: #6b7280; }
+            </style>
+          </head>
+          <body>
+            ${content.innerHTML}
+          </body>
+        </html>
+      `;
+      const fileBuffer = await htmlToDocx(htmlString);
+
+      const blob = new Blob([fileBuffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `${resumeData.name.replace(' ', '_')}_Resume.docx`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -150,10 +214,25 @@ export default function ResumeBuilderClient() {
       <div className="bg-white dark:bg-card p-6 rounded-lg shadow-sm">
         <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-headline font-bold">Resume Editor</h1>
-            <Button onClick={handlePrint}>
-                <Download className="mr-2 h-4 w-4" />
-                Download PDF
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button>
+                  <Download className="mr-2 h-4 w-4" />
+                  Download
+                  <ChevronDown className="ml-2 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem onClick={handlePrint}>
+                  <FileText className="mr-2 h-4 w-4" />
+                  Download as PDF
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleWordDownload}>
+                  <FileWord className="mr-2 h-4 w-4" />
+                  Download as Word
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
         </div>
         <Accordion type="multiple" defaultValue={["template", "personal"]} className="w-full">
          <AccordionItem value="template">
@@ -175,7 +254,7 @@ export default function ResumeBuilderClient() {
                     {Object.keys(templates).map((key) => (
                        <Label key={key} htmlFor={key} className="cursor-pointer rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
                         <RadioGroupItem value={key} id={key} className="sr-only" />
-                        <span className="text-sm font-medium capitalize">{key}</span>
+                        <span className="text-sm font-medium capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                       </Label>
                     ))}
                   </RadioGroup>
