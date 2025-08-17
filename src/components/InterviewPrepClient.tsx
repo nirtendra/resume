@@ -1,7 +1,7 @@
 'use client';
 
 import { useFormState, useFormStatus } from 'react-dom';
-import { Bot, Lightbulb, Loader2, MessageSquareQuestion } from 'lucide-react';
+import { Bot, Lightbulb, Loader2, MessageSquareQuote } from 'lucide-react';
 
 import { getInterviewPrep } from '@/app/interview-prep/actions';
 import { Button } from '@/components/ui/button';
@@ -76,7 +76,7 @@ export default function InterviewPrepClient() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <MessageSquareQuestion className="text-primary" />
+                <MessageSquareQuote className="text-primary" />
                 Potential Interview Questions
               </CardTitle>
             </CardHeader>
