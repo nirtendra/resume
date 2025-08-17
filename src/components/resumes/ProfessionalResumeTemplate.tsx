@@ -15,10 +15,10 @@ export function ProfessionalResumeTemplate({ data }: ResumePreviewProps) {
             <h1 className="text-4xl font-bold text-gray-800">{data.name}</h1>
           </div>
           <div className="text-right text-sm text-gray-600 space-y-1">
-            <p>{data.email}</p>
-            <p>{data.phone}</p>
-            <p>{data.linkedin}</p>
-            <p>{data.github}</p>
+            {data.email && <p>{data.email}</p>}
+            {data.phone && <p>{data.phone}</p>}
+            {data.linkedin && <p>{data.linkedin}</p>}
+            {data.github && <p>{data.github}</p>}
           </div>
         </header>
 

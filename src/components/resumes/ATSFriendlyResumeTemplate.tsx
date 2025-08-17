@@ -12,7 +12,10 @@ export function ATSFriendlyResumeTemplate({ data }: ResumePreviewProps) {
         <header className="text-center mb-6">
           <h1 className="text-3xl font-bold">{data.name}</h1>
           <p className="text-sm text-gray-600 mt-2">
-            {data.email} | {data.phone} | {data.linkedin} | {data.github}
+            {data.email}
+            {data.phone && ` | ${data.phone}`}
+            {data.linkedin && ` | ${data.linkedin}`}
+            {data.github && ` | ${data.github}`}
           </p>
         </header>
 

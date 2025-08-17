@@ -17,18 +17,26 @@ export function ClassicResumeTemplate({ data }: ResumePreviewProps) {
         <header className="text-center mb-8 border-b pb-6">
           <h1 className="text-4xl font-bold font-headline text-primary">{data.name}</h1>
           <div className="flex justify-center items-center gap-x-6 gap-y-2 flex-wrap mt-4 text-sm text-gray-600">
-            <a href={`mailto:${data.email}`} className="flex items-center gap-2 hover:text-primary">
-              <Mail size={14} /> {data.email}
-            </a>
-            <a href={`tel:${data.phone}`} className="flex items-center gap-2 hover:text-primary">
-              <Phone size={14} /> {data.phone}
-            </a>
-            <a href={`https://${data.linkedin}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary">
-              <Linkedin size={14} /> {data.linkedin}
-            </a>
-             <a href={`https://${data.github}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary">
-              <Github size={14} /> {data.github}
-            </a>
+            {data.email && (
+              <a href={`mailto:${data.email}`} className="flex items-center gap-2 hover:text-primary">
+                <Mail size={14} /> {data.email}
+              </a>
+            )}
+            {data.phone && (
+              <a href={`tel:${data.phone}`} className="flex items-center gap-2 hover:text-primary">
+                <Phone size={14} /> {data.phone}
+              </a>
+            )}
+            {data.linkedin && (
+              <a href={`https://${data.linkedin}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary">
+                <Linkedin size={14} /> {data.linkedin}
+              </a>
+            )}
+            {data.github && (
+              <a href={`https://${data.github}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary">
+                <Github size={14} /> {data.github}
+              </a>
+            )}
           </div>
         </header>
 

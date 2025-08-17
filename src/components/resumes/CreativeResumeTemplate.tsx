@@ -23,18 +23,26 @@ export function CreativeResumeTemplate({ data }: ResumePreviewProps) {
              <section>
               <h2 className="text-sm font-bold uppercase tracking-widest text-primary mb-3">Contact</h2>
               <div className="flex flex-col gap-2 text-xs text-gray-600">
-                <a href={`mailto:${data.email}`} className="flex items-center gap-2 hover:text-primary">
-                  <Mail size={14} /> <span>{data.email}</span>
-                </a>
-                <a href={`tel:${data.phone}`} className="flex items-center gap-2 hover:text-primary">
-                  <Phone size={14} /> <span>{data.phone}</span>
-                </a>
-                <a href={`https://${data.linkedin}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary">
-                  <Linkedin size={14} /> <span>LinkedIn</span>
-                </a>
-                <a href={`https://${data.github}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary">
-                  <Github size={14} /> <span>GitHub</span>
-                </a>
+                {data.email && (
+                  <a href={`mailto:${data.email}`} className="flex items-center gap-2 hover:text-primary">
+                    <Mail size={14} /> <span>{data.email}</span>
+                  </a>
+                )}
+                {data.phone && (
+                  <a href={`tel:${data.phone}`} className="flex items-center gap-2 hover:text-primary">
+                    <Phone size={14} /> <span>{data.phone}</span>
+                  </a>
+                )}
+                {data.linkedin && (
+                  <a href={`https://${data.linkedin}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary">
+                    <Linkedin size={14} /> <span>LinkedIn</span>
+                  </a>
+                )}
+                {data.github && (
+                  <a href={`https://${data.github}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary">
+                    <Github size={14} /> <span>GitHub</span>
+                  </a>
+                )}
               </div>
             </section>
 
