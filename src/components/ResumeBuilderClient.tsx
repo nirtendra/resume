@@ -12,8 +12,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { ResumePreview } from './ResumePreview';
-import { Download, PlusCircle, Trash2 } from 'lucide-react';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Download, PlusCircle, Trash2, Palette } from 'lucide-react';
+import { ClassicResumeTemplate } from './resumes/ClassicResumeTemplate';
+import { ModernResumeTemplate } from './resumes/ModernResumeTemplate';
+import { CreativeResumeTemplate } from './resumes/CreativeResumeTemplate';
 
 export interface ResumeData {
   name: string;
@@ -69,8 +73,17 @@ const initialResumeData: ResumeData = {
   skills: 'React, Node.js, TypeScript, Next.js, Tailwind CSS, Firebase',
 };
 
+const templates = {
+  classic: ClassicResumeTemplate,
+  modern: ModernResumeTemplate,
+  creative: CreativeResumeTemplate,
+};
+
+type TemplateKey = keyof typeof templates;
+
 export default function ResumeBuilderClient() {
   const [resumeData, setResumeData] = useState<ResumeData>(initialResumeData);
+  const [selectedTemplate, setSelectedTemplate] = useState<TemplateKey>('classic');
   const resumePreviewRef = useRef(null);
 
   const handlePrint = useReactToPrint({
@@ -130,6 +143,8 @@ export default function ResumeBuilderClient() {
     }))
   }
 
+  const SelectedTemplateComponent = templates[selectedTemplate];
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
       <div className="bg-white dark:bg-card p-6 rounded-lg shadow-sm">
@@ -140,7 +155,34 @@ export default function ResumeBuilderClient() {
                 Download PDF
             </Button>
         </div>
-        <Accordion type="single" defaultValue="personal" collapsible className="w-full">
+        <Accordion type="multiple" defaultValue={["template", "personal"]} className="w-full">
+         <AccordionItem value="template">
+            <AccordionTrigger>Template</AccordionTrigger>
+            <AccordionContent>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Palette />
+                    Choose a Template
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <RadioGroup
+                    value={selectedTemplate}
+                    onValueChange={(value) => setSelectedTemplate(value as TemplateKey)}
+                    className="grid grid-cols-1 sm:grid-cols-3 gap-4"
+                  >
+                    {Object.keys(templates).map((key) => (
+                       <Label key={key} htmlFor={key} className="cursor-pointer rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
+                        <RadioGroupItem value={key} id={key} className="sr-only" />
+                        <span className="text-sm font-medium capitalize">{key}</span>
+                      </Label>
+                    ))}
+                  </RadioGroup>
+                </CardContent>
+              </Card>
+            </AccordionContent>
+          </AccordionItem>
           <AccordionItem value="personal">
             <AccordionTrigger>Personal Information</AccordionTrigger>
             <AccordionContent className="space-y-4">
@@ -180,7 +222,7 @@ export default function ResumeBuilderClient() {
           <AccordionItem value="experience">
             <AccordionTrigger>Work Experience</AccordionTrigger>
             <AccordionContent className="space-y-4">
-              {resumeData.experience.map((exp, index) => (
+              {resumeData.experience.map((exp) => (
                 <div key={exp.id} className="p-4 border rounded-md space-y-2 relative">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -214,7 +256,7 @@ export default function ResumeBuilderClient() {
           <AccordionItem value="education">
             <AccordionTrigger>Education</AccordionTrigger>
             <AccordionContent className="space-y-4">
-              {resumeData.education.map((edu, index) => (
+              {resumeData.education.map((edu) => (
                 <div key={edu.id} className="p-4 border rounded-md space-y-2 relative">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                      <div>
@@ -252,8 +294,10 @@ export default function ResumeBuilderClient() {
         </Accordion>
       </div>
       <div className="lg:sticky lg:top-24">
-        <ResumePreview ref={resumePreviewRef} data={resumeData} />
+        <SelectedTemplateComponent ref={resumePreviewRef} data={resumeData} />
       </div>
     </div>
   );
 }
+
+    
