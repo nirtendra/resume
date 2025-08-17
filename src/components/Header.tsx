@@ -11,6 +11,7 @@ export function Header() {
 
   const navLinks = [
     { href: '/resume-builder', label: 'Resume Builder' },
+    { href: '/cover-letter', label: 'Cover Letter' },
     { href: '/interview-prep', label: 'Interview Prep' },
   ];
 
