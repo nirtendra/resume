@@ -22,7 +22,8 @@ export async function createWordDocument(htmlContent: string) {
 
 export async function generateResumeFromJD(
   jobDescription: string,
-  currentResume: ResumeData
+  currentResume: ResumeData,
+  pastedResume: string,
 ): Promise<ResumeData | { error: string }> {
   if (!jobDescription || jobDescription.trim().length < 50) {
     return {
@@ -34,6 +35,7 @@ export async function generateResumeFromJD(
     const input: GenerateResumeInput = {
       jobDescription,
       currentResume,
+      pastedResume,
     };
     const result = await generateResume(input);
     return result;

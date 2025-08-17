@@ -120,6 +120,7 @@ export default function ResumeBuilderClient() {
   const [isDownloadingWord, setIsDownloadingWord] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [jobDescription, setJobDescription] = useState('');
+  const [pastedResume, setPastedResume] = useState('');
   const [aiError, setAiError] = useState<string | null>(null);
   const [sections, setSections] = useState<SectionId[]>([
     'personal',
@@ -230,7 +231,7 @@ export default function ResumeBuilderClient() {
   const handleGenerateResume = async () => {
     setIsGenerating(true);
     setAiError(null);
-    const result = await generateResumeFromJD(jobDescription, resumeData);
+    const result = await generateResumeFromJD(jobDescription, resumeData, pastedResume);
     setIsGenerating(false);
     if ('error' in result) {
       setAiError(result.error);
@@ -545,6 +546,16 @@ export default function ResumeBuilderClient() {
                     value={jobDescription}
                     onChange={(e) => setJobDescription(e.target.value)}
                     rows={8}
+                  />
+                </div>
+                 <div>
+                  <Label htmlFor="pasted-resume">Paste Your Existing Resume (Optional)</Label>
+                  <Textarea 
+                    id="pasted-resume"
+                    placeholder="Paste your current resume here. The AI will use it as a starting point to refine and tailor."
+                    value={pastedResume}
+                    onChange={(e) => setPastedResume(e.target.value)}
+                    rows={12}
                   />
                 </div>
                 <Button onClick={handleGenerateResume} disabled={isGenerating || !jobDescription} className="w-full">

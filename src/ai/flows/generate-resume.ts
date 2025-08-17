@@ -53,8 +53,10 @@ const ResumeDataSchema = z.object({
 
 const GenerateResumeInputSchema = z.object({
   jobDescription: z.string().describe('The job description to tailor the resume for.'),
-  currentResume: ResumeDataSchema.describe("The user's current resume data."),
+  currentResume: ResumeDataSchema.describe("The user's current resume data, which may be partially filled."),
+  pastedResume: z.string().optional().describe("The full text of the user's existing resume, pasted in by the user."),
 });
+
 
 export type GenerateResumeInput = z.infer<typeof GenerateResumeInputSchema>;
 export type GenerateResumeOutput = z.infer<typeof ResumeDataSchema>;
@@ -69,18 +71,25 @@ const prompt = ai.definePrompt({
     schema: z.object({
       jobDescription: z.string(),
       currentResume: z.string(), // Expecting a JSON string now
+      pastedResume: z.string().optional(),
     }),
   },
   output: {schema: ResumeDataSchema},
   prompt: `You are a top-tier resume writer and career coach with extensive experience in creating professional, ATS-friendly resumes that land interviews at top companies.
 
   Your task is to conduct a comprehensive analysis of the provided job description and the user's current resume data. You will then rewrite and optimize the entire resume to be perfectly tailored for the target role, ensuring every section is complete, professional, and strategic.
+  
+  **Primary Information Source:**
+  If the user has provided their pasted resume content, use that as the primary source of truth for their experience, skills, and education. If it is empty, use the 'currentResume' data from the form. If both are sparse, generate content based on the job description.
 
   Job Description:
   {{{jobDescription}}}
 
-  Current Resume Data (in JSON format):
+  Current Resume Data (from form fields, in JSON format):
   {{{currentResume}}}
+
+  Pasted Resume Content (if provided by user):
+  {{{pastedResume}}}
 
   **Core Instructions:**
 
@@ -92,7 +101,7 @@ const prompt = ai.definePrompt({
       *   Ensure the output for each experience description is a bulleted list. Each bullet point MUST start with '- '.
 
   3.  **Generate Work Experience (If Missing)**:
-      *   If the 'experience' array in the current resume is empty, you MUST generate a complete, relevant, and professional work history based on the job description.
+      *   If the 'experience' array in the current or pasted resume is empty, you MUST generate a complete, relevant, and professional work history based on the job description.
       *   Invent plausible companies, roles, dates, and detailed, accomplishment-oriented descriptions that align perfectly with the target job. Create at least two distinct professional roles.
   
   4.  **Generate Projects (If relevant)**:
@@ -105,7 +114,7 @@ const prompt = ai.definePrompt({
       *   Populate the 'certifications' and 'personalAttributes' fields with relevant items derived from the job description if they would strengthen the resume.
 
   6.  **Maintain Professional Integrity & Contextualize Contact Info**:
-      *   **Do Not Change**: Do not alter the user's name, email, phone, or education details (institution, degree, date). Preserve the user's provided values for LinkedIn and GitHub if they exist.
+      *   **Do Not Change**: Do not alter the user's name, email, or phone. Preserve the user's provided values for LinkedIn and GitHub if they exist.
       *   **Contextual Links**: Based on the job description, decide if the 'linkedin' and 'github' fields are relevant. For example, a software engineering role should include GitHub, but a sales role might not. If a field is not relevant, omit it from the final JSON output.
 
   7.  **Return a Complete Resume**: Your final output must be the complete, updated resume data in the specified JSON format, with all sections intelligently filled out.
@@ -120,8 +129,9 @@ const generateResumeFlow = ai.defineFlow(
   },
   async (input) => {
     const promptInput = {
-      ...input,
+      jobDescription: input.jobDescription,
       currentResume: JSON.stringify(input.currentResume, null, 2),
+      pastedResume: input.pastedResume
     };
     const {output} = await prompt(promptInput);
     return output!;
