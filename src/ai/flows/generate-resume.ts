@@ -29,6 +29,13 @@ const EducationSchema = z.object({
   date: z.string(),
 });
 
+const ProjectSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  duration: z.string(),
+  description: z.string(),
+});
+
 const ResumeDataSchema = z.object({
   name: z.string(),
   email: z.string(),
@@ -39,11 +46,14 @@ const ResumeDataSchema = z.object({
   experience: z.array(ExperienceSchema),
   education: z.array(EducationSchema),
   skills: z.string(),
+  projects: z.array(ProjectSchema).optional(),
+  certifications: z.string().optional(),
+  personalAttributes: z.string().optional(),
 });
 
 const GenerateResumeInputSchema = z.object({
   jobDescription: z.string().describe('The job description to tailor the resume for.'),
-  currentResume: ResumeDataSchema.describe('The user\'s current resume data.'),
+  currentResume: ResumeDataSchema.describe("The user's current resume data."),
 });
 
 export type GenerateResumeInput = z.infer<typeof GenerateResumeInputSchema>;
@@ -84,16 +94,21 @@ const prompt = ai.definePrompt({
   3.  **Generate Work Experience (If Missing)**:
       *   If the 'experience' array in the current resume is empty, you MUST generate a complete, relevant, and professional work history based on the job description.
       *   Invent plausible companies, roles, dates, and detailed, accomplishment-oriented descriptions that align perfectly with the target job. Create at least two distinct professional roles.
+  
+  4.  **Generate Projects (If relevant)**:
+      *   Analyze the job description to determine if a 'Projects' section would be beneficial (e.g., for technical roles, creative portfolios).
+      *   If so, and if the user has not provided any, generate one or two relevant project examples with a name, duration, and a compelling description of the outcome and technologies used.
 
-  4.  **Tailor Skills Section**:
-      *   Analyze the job description for key technical skills, soft skills, and relevant keywords.
-      *   Update the skills section to be a comprehensive, comma-separated list that includes these keywords while retaining the user's core competencies.
+  5.  **Tailor Skills, Certifications, and Attributes**:
+      *   Analyze the job description for key technical skills, soft skills, tools, and relevant keywords.
+      *   Update the 'skills' section to be a comprehensive, comma-separated list that includes these keywords.
+      *   Populate the 'certifications' and 'personalAttributes' fields with relevant items derived from the job description if they would strengthen the resume.
 
-  5.  **Maintain Professional Integrity & Contextualize Contact Info**:
+  6.  **Maintain Professional Integrity & Contextualize Contact Info**:
       *   **Do Not Change**: Do not alter the user's name, email, phone, or education details (institution, degree, date). Preserve the user's provided values for LinkedIn and GitHub if they exist.
       *   **Contextual Links**: Based on the job description, decide if the 'linkedin' and 'github' fields are relevant. For example, a software engineering role should include GitHub, but a sales role might not. If a field is not relevant, omit it from the final JSON output.
 
-  6.  **Return a Complete Resume**: Your final output must be the complete, updated resume data in the specified JSON format, with all sections intelligently filled out.
+  7.  **Return a Complete Resume**: Your final output must be the complete, updated resume data in the specified JSON format, with all sections intelligently filled out.
   `,
 });
 
