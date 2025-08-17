@@ -34,9 +34,9 @@ export function SortableSection({ id, title, children }: SortableSectionProps) {
       <AccordionItem value={id} className="bg-background">
         <AccordionTrigger>
           <div className="flex items-center gap-2">
-            <button {...attributes} {...listeners} className="cursor-grab p-1">
+            <span {...attributes} {...listeners} className="cursor-grab p-1">
                 <GripVertical className="h-5 w-5 text-muted-foreground" />
-            </button>
+            </span>
             <span>{title}</span>
           </div>
         </AccordionTrigger>
