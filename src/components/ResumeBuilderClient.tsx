@@ -20,14 +20,15 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Download, PlusCircle, Trash2, Palette, ChevronDown, FileText, FileCode, Loader2 } from 'lucide-react';
+import { Download, PlusCircle, Trash2, Palette, ChevronDown, FileText, FileCode, Loader2, Bot } from 'lucide-react';
 import { ClassicResumeTemplate } from './resumes/ClassicResumeTemplate';
 import { ModernResumeTemplate } from './resumes/ModernResumeTemplate';
 import { CreativeResumeTemplate } from './resumes/CreativeResumeTemplate';
 import { ProfessionalResumeTemplate } from './resumes/ProfessionalResumeTemplate';
 import { ATSFriendlyResumeTemplate } from './resumes/ATSFriendlyResumeTemplate';
-import { createWordDocument } from '@/app/resume-builder/actions';
+import { createWordDocument, generateResumeFromJD } from '@/app/resume-builder/actions';
 import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 
 export interface ResumeData {
   name: string;
@@ -97,6 +98,9 @@ export default function ResumeBuilderClient() {
   const [resumeData, setResumeData] = useState<ResumeData>(initialResumeData);
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateKey>('classic');
   const [isDownloadingWord, setIsDownloadingWord] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [jobDescription, setJobDescription] = useState('');
+  const [aiError, setAiError] = useState<string | null>(null);
   const { toast } = useToast();
   const resumePreviewRef = useRef(null);
 
@@ -170,6 +174,22 @@ export default function ResumeBuilderClient() {
       } finally {
         setIsDownloadingWord(false);
       }
+    }
+  };
+
+  const handleGenerateResume = async () => {
+    setIsGenerating(true);
+    setAiError(null);
+    const result = await generateResumeFromJD(jobDescription, resumeData);
+    setIsGenerating(false);
+    if ('error' in result) {
+      setAiError(result.error);
+    } else {
+      setResumeData(result);
+      toast({
+        title: 'Resume Generated!',
+        description: 'Your resume has been updated with AI suggestions.',
+      });
     }
   };
 
@@ -277,6 +297,41 @@ export default function ResumeBuilderClient() {
                       </Label>
                     ))}
                   </RadioGroup>
+                </CardContent>
+              </Card>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="ai-generator">
+            <AccordionTrigger>AI Resume Generator</AccordionTrigger>
+            <AccordionContent>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Bot />
+                    Tailor Your Resume with AI
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label htmlFor="job-description">Paste Job Description</Label>
+                    <Textarea 
+                      id="job-description"
+                      placeholder="Paste the full job description here to generate a tailored resume..."
+                      value={jobDescription}
+                      onChange={(e) => setJobDescription(e.target.value)}
+                      rows={8}
+                    />
+                  </div>
+                  <Button onClick={handleGenerateResume} disabled={isGenerating || !jobDescription} className="w-full">
+                    {isGenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Bot className="mr-2 h-4 w-4" />}
+                    Generate Tailored Resume
+                  </Button>
+                  {aiError && (
+                    <Alert variant="destructive">
+                        <AlertTitle>Error</AlertTitle>
+                        <AlertDescription>{aiError}</AlertDescription>
+                    </Alert>
+                  )}
                 </CardContent>
               </Card>
             </AccordionContent>
