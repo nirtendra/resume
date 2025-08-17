@@ -20,7 +20,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Download, PlusCircle, Trash2, Palette, ChevronDown, FileText, FileWord, Loader2 } from 'lucide-react';
+import { Download, PlusCircle, Trash2, Palette, ChevronDown, FileText, FileCode, Loader2 } from 'lucide-react';
 import { ClassicResumeTemplate } from './resumes/ClassicResumeTemplate';
 import { ModernResumeTemplate } from './resumes/ModernResumeTemplate';
 import { CreativeResumeTemplate } from './resumes/CreativeResumeTemplate';
@@ -247,7 +247,7 @@ export default function ResumeBuilderClient() {
                   Download as PDF
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleWordDownload} disabled={isDownloadingWord}>
-                  {isDownloadingWord ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <FileWord className="mr-2 h-4 w-4" />}
+                  {isDownloadingWord ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <FileCode className="mr-2 h-4 w-4" />}
                   Download as Word
                 </DropdownMenuItem>
               </DropdownMenuContent>
