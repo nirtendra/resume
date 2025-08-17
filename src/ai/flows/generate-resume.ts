@@ -75,9 +75,10 @@ const prompt = ai.definePrompt({
   Instructions:
   1.  **Rewrite the Professional Summary**: Make it concise, powerful, and directly aligned with the key requirements of the job description.
   2.  **Optimize Work Experience**: For each role, rewrite the descriptions to highlight accomplishments and skills that are most relevant to the job description. Use action verbs and quantify achievements where possible. Ensure the output is a bulleted list format within the description string, with each bullet point starting with '- '.
-  3.  **Tailor Skills**: Update the skills section to include keywords from the job description while retaining the user's core competencies. Ensure it's a comma-separated string.
-  4.  **Do Not Change**: Do not change the user's name, contact information (email, phone, linkedin, github), or education details (institution, degree, date).
-  5.  **Return full resume**: Return the complete, updated resume data in the specified JSON format.
+  3.  **If no work experience is provided**: Based on the job description, generate a complete, relevant, and professional work history. Invent plausible companies, roles, dates, and detailed, accomplishment-oriented descriptions that align with the target job.
+  4.  **Tailor Skills**: Update the skills section to include keywords from the job description while retaining the user's core competencies. Ensure it's a comma-separated string.
+  5.  **Do Not Change**: Do not change the user's name, contact information (email, phone, linkedin, github), or education details (institution, degree, date).
+  6.  **Return full resume**: Return the complete, updated resume data in the specified JSON format.
   `,
 });
 

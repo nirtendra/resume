@@ -64,15 +64,7 @@ const initialResumeData: ResumeData = {
   linkedin: 'linkedin.com/in/yourprofile',
   github: 'github.com/yourprofile',
   summary: 'A brief professional summary about you. Highlight your key skills and career goals.',
-  experience: [
-    {
-      id: 1,
-      company: 'Tech Company',
-      role: 'Software Engineer',
-      date: 'Jan 2020 - Present',
-      description: '- Developed and maintained web applications using React and Node.js.\n- Collaborated with cross-functional teams to deliver high-quality software.'
-    },
-  ],
+  experience: [],
   education: [
     {
       id: 1,
