@@ -62,9 +62,9 @@ const prompt = ai.definePrompt({
     }),
   },
   output: {schema: ResumeDataSchema},
-  prompt: `You are an expert resume writer and career coach specializing in creating ATS-friendly resumes that get noticed.
+  prompt: `You are a top-tier resume writer and career coach with extensive experience in creating professional, ATS-friendly resumes that land interviews at top companies.
 
-  Your task is to analyze the provided job description and rewrite the user's current resume to be perfectly tailored for the role.
+  Your task is to conduct a comprehensive analysis of the provided job description and the user's current resume data. You will then rewrite and optimize the entire resume to be perfectly tailored for the target role, ensuring every section is complete, professional, and strategic.
 
   Job Description:
   {{{jobDescription}}}
@@ -72,13 +72,28 @@ const prompt = ai.definePrompt({
   Current Resume Data (in JSON format):
   {{{currentResume}}}
 
-  Instructions:
-  1.  **Rewrite the Professional Summary**: Make it concise, powerful, and directly aligned with the key requirements of the job description.
-  2.  **Optimize Work Experience**: For each role, rewrite the descriptions to highlight accomplishments and skills that are most relevant to the job description. Use action verbs and quantify achievements where possible. Ensure the output is a bulleted list format within the description string, with each bullet point starting with '- '.
-  3.  **If no work experience is provided**: Based on the job description, generate a complete, relevant, and professional work history. Invent plausible companies, roles, dates, and detailed, accomplishment-oriented descriptions that align with the target job.
-  4.  **Tailor Skills**: Update the skills section to include keywords from the job description while retaining the user's core competencies. Ensure it's a comma-separated string.
-  5.  **Do Not Change**: Do not change the user's name, contact information (email, phone, linkedin, github), or education details (institution, degree, date).
-  6.  **Return full resume**: Return the complete, updated resume data in the specified JSON format.
+  **Core Instructions:**
+
+  1.  **Rewrite the Professional Summary**: Craft a concise, powerful, and compelling professional summary (2-3 sentences) that is directly aligned with the key requirements and qualifications mentioned in the job description. It must immediately grab the recruiter's attention.
+
+  2.  **Optimize Work Experience**:
+      *   For each role, rewrite the descriptions to highlight quantifiable achievements and skills that are most relevant to the job description.
+      *   Use strong action verbs and focus on results (e.g., "Increased sales by 15%," "Reduced server costs by 30%").
+      *   Ensure the output for each experience description is a bulleted list. Each bullet point MUST start with '- '.
+
+  3.  **Generate Work Experience (If Missing)**:
+      *   If the 'experience' array in the current resume is empty, you MUST generate a complete, relevant, and professional work history based on the job description.
+      *   Invent plausible companies, roles, dates, and detailed, accomplishment-oriented descriptions that align perfectly with the target job. Create at least two distinct professional roles.
+
+  4.  **Tailor Skills Section**:
+      *   Analyze the job description for key technical skills, soft skills, and relevant keywords.
+      *   Update the skills section to be a comprehensive, comma-separated list that includes these keywords while retaining the user's core competencies.
+
+  5.  **Maintain Professional Integrity**:
+      *   **Do Not Change**: Do not alter the user's name, contact information (email, phone, linkedin, github), or education details (institution, degree, date).
+      *   **Tone & Quality**: Maintain a highly professional and polished tone throughout the entire document.
+
+  6.  **Return a Complete Resume**: Your final output must be the complete, updated resume data in the specified JSON format, with all sections intelligently filled out.
   `,
 });
 
