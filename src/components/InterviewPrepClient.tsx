@@ -1,6 +1,7 @@
 'use client';
 
-import { useFormState, useFormStatus } from 'react-dom';
+import { useActionState } from 'react';
+import { useFormStatus } from 'react-dom';
 import { Bot, Lightbulb, Loader2, MessageSquareQuote } from 'lucide-react';
 
 import { getInterviewPrep } from '@/app/interview-prep/actions';
@@ -42,7 +43,7 @@ function SubmitButton() {
 }
 
 export default function InterviewPrepClient() {
-  const [state, formAction] = useFormState(getInterviewPrep, initialState);
+  const [state, formAction] = useActionState(getInterviewPrep, initialState);
 
   return (
     <div className="max-w-4xl mx-auto">
