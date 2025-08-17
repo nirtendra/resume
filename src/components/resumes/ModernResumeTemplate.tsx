@@ -149,12 +149,12 @@ export function ModernResumeTemplate({ data, sectionOrder }: ResumePreviewProps)
             </div>
           </header>
           
-          {sidebarSections.map(id => sections[id])}
+          {sidebarSections.map(id => <div key={id}>{sections[id]}</div>)}
 
         </div>
 
         <div className="col-span-2">
-          {mainSections.map(id => sections[id])}
+          {mainSections.map(id => <div key={id}>{sections[id]}</div>)}
         </div>
       </div>
     </div>

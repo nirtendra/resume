@@ -145,12 +145,12 @@ export function CreativeResumeTemplate({ data, sectionOrder }: ResumePreviewProp
               </div>
             </section>
             
-            {sidebarSections.map(id => sections[id])}
+            {sidebarSections.map(id => <div key={id}>{sections[id]}</div>)}
 
           </div>
 
           <div className="col-span-8 space-y-8">
-            {mainSections.map(id => sections[id])}
+            {mainSections.map(id => <div key={id}>{sections[id]}</div>)}
           </div>
         </div>
       </div>

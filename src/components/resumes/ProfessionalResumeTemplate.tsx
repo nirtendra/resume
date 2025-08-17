@@ -132,7 +132,7 @@ export function ProfessionalResumeTemplate({ data, sectionOrder = defaultSection
           </div>
         </header>
 
-        {sectionOrder.map(id => sections[id])}
+        {sectionOrder.map(id => <div key={id}>{sections[id]}</div>)}
 
       </div>
     </div>
